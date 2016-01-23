@@ -1,0 +1,37 @@
+{
+	"name": "bulton-fr/bfw-fastroute",
+	"type": "library",
+	"description": "Module Controler pour BFW",
+	"keywords": ["controler", "module", "bfw"],
+	"homepage": "https://github.com/bulton-fr/bfw-fastroute",
+	"time": "2014-02-07",
+	"license": "LGPL-3.0",
+	"authors":
+	[
+		{
+			"name": "Vermeulen Maxime / Bulton",
+			"homepage": "http://www.bulton.fr",
+			"email": "bulton.fr@bulton.fr"
+		}
+	],
+	"support":
+	{
+		"email": "support@bulton.fr",
+		"issues": "https://github.com/bulton-fr/bfw-fastroute/issues",
+		"source": "https://github.com/bulton-fr/bfw-fastroute"
+	},
+	"require":
+	{
+		"php": ">=5.3.0",
+        "bulton-fr/bfw": "~2.2",
+        "bulton-fr/bfw-controller": "~2.0"
+	},
+	"minimum-stability": "stable",
+	"autoload":
+	{
+		"psr-4":
+		{
+			"BFWFastRoute\\": "src/classes/"
+		}
+	}
+}
