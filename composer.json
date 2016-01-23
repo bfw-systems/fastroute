@@ -24,7 +24,8 @@
 	{
 		"php": ">=5.3.0",
         "bulton-fr/bfw": "~2.2",
-        "bulton-fr/bfw-controller": "~2.0"
+        "bulton-fr/bfw-controller": "~2.0",
+		"nikic/fast-route": "v0.7.0"
 	},
 	"minimum-stability": "stable",
 	"autoload":
