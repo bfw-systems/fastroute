@@ -1,38 +1,40 @@
 {
 	"name": "bulton-fr/bfw-fastroute",
 	"type": "library",
-	"description": "Module Controler pour BFW",
-	"keywords": ["controler", "module", "bfw"],
+	"description": "Router module for BFW",
+	"keywords": ["router", "module", "bfw"],
 	"homepage": "https://github.com/bulton-fr/bfw-fastroute",
-	"time": "2014-02-07",
+	"time": "2016-10-13",
 	"license": "LGPL-3.0",
-	"authors":
-	[
+	"authors": [
 		{
 			"name": "Vermeulen Maxime / Bulton",
 			"homepage": "http://www.bulton.fr",
 			"email": "bulton.fr@bulton.fr"
 		}
 	],
-	"support":
-	{
+	"support": {
 		"email": "support@bulton.fr",
 		"issues": "https://github.com/bulton-fr/bfw-fastroute/issues",
 		"source": "https://github.com/bulton-fr/bfw-fastroute"
 	},
-	"require":
-	{
-		"php": ">=5.3.0",
-        "bulton-fr/bfw": "~2.2",
-        "bulton-fr/bfw-controller": "~2.0",
+	"require": {
+        "php": ">=5.6.0",
+        "bulton-fr/bfw": "3.0.x-dev",
 		"nikic/fast-route": "v0.7.0"
 	},
+    "require-dev": {
+        "atoum/atoum": "~2.5"
+    },
 	"minimum-stability": "dev",
-	"autoload":
-	{
-		"psr-4":
-		{
-			"BFWFastRoute\\": "src/classes/"
+	"autoload": {
+		"psr-4": {
+			"BfwFastRoute\\": "src/class/"
 		}
-	}
+	},
+    "autoload-dev": {
+        "psr-4": {
+            "BfwFastRoute\\test\\unit\\mocks\\": "test/unit/mocks"
+        }
+    }
 }

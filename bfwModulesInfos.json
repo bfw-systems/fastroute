@@ -1,0 +1,9 @@
+{
+    "srcPath": "src/",
+    "configPath": "config/",
+    "configFiles": [
+        "config.php",
+        "routes.php"
+    ],
+    "installScript": ""
+}
