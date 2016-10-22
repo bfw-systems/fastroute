@@ -16,7 +16,7 @@ before_script:
 
 script:
   - ./vendor/bin/atoum -c .atoum.php -d test/unit/src -utr
-  - chmod +x test/run/installer_*
+  - chmod +x test/run/installer
   - cd $TRAVIS_BUILD_DIR/test/run && ./installer
 
 after_script:
