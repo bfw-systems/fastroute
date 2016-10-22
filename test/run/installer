@@ -1,0 +1,104 @@
+#!/bin/sh
+
+echo '\033[0;33mCheck module\033[0m'
+
+echo '\033[0;33mRemove and create test directory\033[0m'
+rm -rf install
+mkdir -p install
+cp -R composer.json install/
+
+cd install
+
+echo '\033[0;33mGet composer and install dependancies\033[0m'
+curl -sS https://getcomposer.org/installer | php
+php composer.phar install
+
+echo '\033[0;33mBFW Install and module\033[0m'
+./vendor/bin/bfw_install
+./vendor/bin/bfw_installModules
+
+echo '\033[0;33mCopy module test skeleton files\033[0m'
+cd ../
+mv install/app/config/bfw/config.php install/app/config/bfw/config.php.original
+cp -Rf skeleton/app/* install/app/
+
+
+echo '\033[0;33mRun php integrated web server\033[0m'
+cd install
+php -S localhost:8000 -t web web/index.php &
+
+echo '\033[0;33mWait 5s web server is running\033[0m'
+sleep 5
+
+exitstatus=0
+
+echo '\033[0;33mGet return for index\033[0m'
+wgetreturn=$( wget -qO - http://localhost:8000 )
+wgetexpected="[200] Target: index.php
+count get array: 0"
+
+echo -n '\033[0;33mCheck return ... \033[0m'
+if [ "$wgetreturn" = "$wgetexpected" ] ;then
+    echo '\033[1;32mOK\033[0m'
+else
+    echo '\033[1;31m Fail\033[0m'
+    exitstatus=1
+fi
+
+echo '\033[0;33mGet return for login\033[0m'
+wgetreturn=$( wget -qO - http://localhost:8000/login )
+wgetexpected="[200] Target: login.php
+count get array: 0"
+
+echo -n '\033[0;33mCheck return ... \033[0m'
+if [ "$wgetreturn" = "$wgetexpected" ] ;then
+    echo '\033[1;32mOK\033[0m'
+else
+    echo '\033[1;31m Fail\033[0m'
+    exitstatus=1
+fi
+
+echo '\033[0;33mGet return for article\033[0m'
+wgetreturn=$( wget -qO - http://localhost:8000/article-20 )
+wgetexpected="[200] Target: article.php
+count get array: 2
+[action] => read
+[id] => 20"
+
+echo -n '\033[0;33mCheck return ... \033[0m'
+if [ "$wgetreturn" = "$wgetexpected" ] ;then
+    echo '\033[1;32mOK\033[0m'
+else
+    echo '\033[1;31m Fail\033[0m'
+    exitstatus=1
+fi
+
+echo '\033[0;33mGet return for login with PUT method\033[0m'
+curlreturn=$( curl -s -X PUT http://localhost:8000/login )
+curlexpected="[405] Target: 
+count get array: 0"
+
+echo -n '\033[0;33mCheck return ... \033[0m'
+if [ "$curlreturn" = "$curlexpected" ] ;then
+    echo '\033[1;32mOK\033[0m'
+else
+    echo '\033[1;31m Fail\033[0m'
+    exitstatus=1
+fi
+
+echo '\033[0;33mGet return for unknown route\033[0m'
+curlreturn=$( curl -s http://localhost:8000/unknown-route )
+curlexpected="[404] Target: 
+count get array: 0"
+
+echo -n '\033[0;33mCheck return ... \033[0m'
+if [ "$curlreturn" = "$curlexpected" ] ;then
+    echo '\033[1;32mOK\033[0m'
+else
+    echo '\033[1;31m Fail\033[0m'
+    exitstatus=1
+fi
+
+
+killall php
+exit "$exitstatus";
