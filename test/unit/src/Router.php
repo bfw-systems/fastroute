@@ -3,8 +3,10 @@
 namespace BfwFastRoute\test\unit;
 
 use \atoum;
+use \BFW\test\helpers\ApplicationInit as AppInit;
 
 require_once(__DIR__.'/../../../vendor/autoload.php');
+require_once(__DIR__.'/../../../vendor/bulton-fr/bfw/test/unit/helpers/ApplicationInit.php');
 require_once(__DIR__.'/../../../vendor/bulton-fr/bfw/test/unit/mocks/src/class/ConfigForceDatas.php');
 require_once(__DIR__.'/../../../vendor/bulton-fr/bfw/test/unit/mocks/src/class/Module.php');
 
@@ -22,9 +24,9 @@ class Router extends atoum
      */
     public function beforeTestMethod($testMethod)
     {
-        define('CTRL_DIR', 'controllers/');
-        define('CONFIG_DIR', 'config/');
-        define('MODULES_DIR', 'modules/');
+        AppInit::init([
+            'vendorDir' => __DIR__.'/../../../vendor'
+        ]);
         
         $config = new \BFW\test\unit\mocks\ConfigForceDatas('unit_test');
         $config->forceConfig(
@@ -153,6 +155,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for index')
             ->if($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
@@ -166,6 +169,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for login on GET')
             ->if($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/login')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
@@ -179,6 +183,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for login on POST')
             ->if($_SERVER['REQUEST_METHOD'] = 'POST')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/login')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
@@ -192,6 +197,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for login on PUT')
             ->if($_SERVER['REQUEST_METHOD'] = 'PUT')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/login')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
@@ -209,6 +215,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for article')
             ->if($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/article-10')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
@@ -227,6 +234,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for no-target')
             ->if($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/no-target')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->given($class = $this->class)
@@ -241,6 +249,7 @@ class Router extends atoum
         $this->assert('test Router::obtainCurrentRoute for unknown route')
             ->if($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and($_SERVER['REQUEST_URI'] = 'https://www.bulton.fr/unknown-route')
+            ->and(\BFW\Application::getInstance()->getRequest()->runDetect())
             ->then
             ->given($linker = \BFW\ControllerRouterLink::getInstance())
             ->if($this->class->obtainCurrentRoute())
