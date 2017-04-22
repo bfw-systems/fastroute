@@ -118,6 +118,8 @@ class Router
         //Add gets datas in route to $_GET var
         $this->addDatasToGetAndPostVar($routeInfo[1]);
         $this->addToSuperglobalVar('GET', $routeInfo[2]);
+        
+        $this->sendNotifyRouteFindToOthers();
     }
     
     /**
@@ -186,5 +188,18 @@ class Router
         if (isset($routeInfos['get'])) {
             $this->addToSuperglobalVar('GET', $routeInfos['get']);
         }
+    }
+    
+    /**
+     * Send to all observer of Application a notify who contains the message
+     * "request_route_find" to say the route for the current request has been
+     * found by us.
+     * 
+     * @return void
+     */
+    protected function sendNotifyRouteFindToOthers()
+    {
+        $app = \BFW\Application::getInstance();
+        $app->notifyAction('request_route_find');
     }
 }
