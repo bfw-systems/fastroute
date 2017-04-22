@@ -107,8 +107,8 @@ class Router
         //Get and send request http status to the controller/router linker
         $httpStatus = $this->checkStatus($routeStatus);
         
+        http_response_code($httpStatus);
         if ($httpStatus !== 200) {
-            http_response_code($httpStatus);
             return;
         }
 
