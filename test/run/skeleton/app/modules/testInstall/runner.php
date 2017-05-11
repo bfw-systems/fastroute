@@ -1,6 +1,6 @@
 <?php
 
-$config = $module->getConfig();
+$config = $this->getConfig();
 $linker = \BFW\ControllerRouterLink::getInstance();
 
 echo '['.http_response_code().'] Target: '.$linker->getTarget()."\n";

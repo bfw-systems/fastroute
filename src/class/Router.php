@@ -52,7 +52,10 @@ class Router
         
         $this->routerLinker = \BFW\ControllerRouterLink::getInstance();
         
-        $this->dispatcher = FastRoute\simpleDispatcher([$this, 'addRoutesToCollector']);
+        $this->dispatcher = FastRoute\simpleDispatcher([
+            $this,
+            'addRoutesToCollector'
+        ]);
     }
     
     /**
@@ -64,7 +67,7 @@ class Router
      */
     public function addRoutesToCollector(FastRoute\RouteCollector $router)
     {
-        $routes = $this->config->getConfig('routes');
+        $routes = $this->config->getValue('routes');
         
         foreach ($routes as $slug => $infos) {
             $slug = trim($slug);

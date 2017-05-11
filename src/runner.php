@@ -1,4 +1,4 @@
 <?php
 
-$bfwFastRoute = new \BfwFastRoute\Router($module);
+$bfwFastRoute = new \BfwFastRoute\Router($this);
 $bfwFastRoute->obtainCurrentRoute();

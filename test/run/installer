@@ -14,8 +14,8 @@ curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 
 echo '\033[0;33mBFW Install and module\033[0m'
-./vendor/bin/bfw_install
-./vendor/bin/bfw_installModules
+./vendor/bin/bfwInstall
+./vendor/bin/bfwInstallModules
 
 echo '\033[0;33mCopy module test skeleton files\033[0m'
 cd ../
