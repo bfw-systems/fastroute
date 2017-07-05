@@ -203,6 +203,6 @@ class Router
     protected function sendNotifyRouteFindToOthers()
     {
         $app = \BFW\Application::getInstance();
-        $app->notifyAction('request_route_find');
+        $app->addNotification('request_route_find');
     }
 }
