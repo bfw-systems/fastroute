@@ -1,4 +1,6 @@
 <?php
 
-$bfwFastRoute = new \BfwFastRoute\Router($this);
-$bfwFastRoute->obtainCurrentRoute();
+$this->router = new \BfwFastRoute\Router($this);
+
+$app = \BFW\Application::getInstance();
+$app->attach($this->router);

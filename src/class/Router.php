@@ -8,14 +8,13 @@
 namespace BfwFastRoute;
 
 use \Exception;
-use \stdClass;
 use \FastRoute;
 
 /**
  * Permet de gérer la vue et de savoir vers quel page envoyer
  * @package bfw-fastroute
  */
-class Router
+class Router implements \SplObserver
 {
     /**
      * @var \BFW\Module $module The bfw module instance for this module
@@ -56,6 +55,21 @@ class Router
             $this,
             'addRoutesToCollector'
         ]);
+    }
+    
+    /**
+     * Observer update method
+     * Call obtainCurrentRoute method on action "apprun_loadAllAppModules".
+     * 
+     * @param \SplSubject $subject
+     * 
+     * @return void
+     */
+    public function update(\SplSubject $subject)
+    {
+        if ($subject->getAction() === 'apprun_loadAllAppModules') {
+            $this->obtainCurrentRoute();
+        }
     }
     
     /**
