@@ -17,6 +17,12 @@ use \FastRoute;
 class Router implements \SplObserver
 {
     /**
+     * @const ERR_TARGET_NOT_DECLARED : Error code if the target has not
+     * been declared
+     */
+    const ERR_TARGET_NOT_DECLARED = 2001001;
+    
+    /**
      * @var \BFW\Module $module The bfw module instance for this module
      */
     protected $module;
@@ -254,8 +260,11 @@ class Router implements \SplObserver
      */
     protected function addTargetToCtrlRouter(array $routeInfos)
     {
-        if (!isset($routeInfos['target'])) {
-            throw new Exception('Router : target not defined');
+        if (array_key_exists('target', $routeInfos) === false) {
+            throw new Exception(
+                'Router : target not defined',
+                self::ERR_TARGET_NOT_DECLARED
+            );
         }
         
         $this->ctrlRouterInfos->target = $routeInfos['target'];
