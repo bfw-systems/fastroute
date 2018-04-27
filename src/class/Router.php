@@ -186,6 +186,11 @@ class Router implements \SplObserver
         //Get and send request http status to the controller/router linker
         $httpStatus = $this->checkStatus($routeStatus);
         
+        if ($httpStatus === 404) {
+            //404 will be declared by \BFW\Application::runCtrlRouterLink()
+            return;
+        }
+        
         http_response_code($httpStatus);
         $this->addInfosToCtrlRouter();
         
