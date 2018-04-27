@@ -2,5 +2,6 @@
 
 $this->router = new \BfwFastRoute\Router($this);
 
-$app = \BFW\Application::getInstance();
-$app->attach($this->router);
+$app        = \BFW\Application::getInstance();
+$appSubject = $app->getSubjectList()->getSubjectForName('ApplicationTasks');
+$appSubject->attach($this->router);
