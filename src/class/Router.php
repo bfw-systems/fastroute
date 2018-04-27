@@ -202,7 +202,7 @@ class Router implements \SplObserver
         $this->addTargetToCtrlRouter($routeInfo[1]);
 
         //Add gets datas in route to $_GET var
-        $this->addDatasToGetAndPostVar($routeInfo[1]);
+        $this->addDatasToGetVar($routeInfo[1]);
         $this->addToSuperglobalVar('GET', $routeInfo[2]);
         
         $this->sendNotifyRouteFindToOthers();
@@ -283,7 +283,7 @@ class Router implements \SplObserver
      * 
      * @return void
      */
-    protected function addDatasToGetAndPostVar(array $routeInfos)
+    protected function addDatasToGetVar(array $routeInfos)
     {
         if (isset($routeInfos['get'])) {
             $this->addToSuperglobalVar('GET', $routeInfos['get']);
