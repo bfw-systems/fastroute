@@ -197,10 +197,10 @@ class Router implements \SplObserver
         if ($httpStatus !== 200) {
             return;
         }
-
-        //Obtains datas for route from config file and send to linker
-        $this->sendInfosForRouteToLinker($routeInfo[1]);
         
+        //Obtains datas for route from config file and send to linker
+        $this->addTargetToCtrlRouter($routeInfo[1]);
+
         //Add gets datas in route to $_GET var
         $this->addDatasToGetAndPostVar($routeInfo[1]);
         $this->addToSuperglobalVar('GET', $routeInfo[2]);
@@ -252,7 +252,7 @@ class Router implements \SplObserver
      * 
      * @throws \Exception If target not define in config file
      */
-    protected function sendInfosForRouteToLinker(array $routeInfos)
+    protected function addTargetToCtrlRouter(array $routeInfos)
     {
         if (!isset($routeInfos['target'])) {
             throw new Exception('Router : target not defined');
