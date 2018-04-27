@@ -105,9 +105,33 @@ class Router implements \SplObserver
      */
     public function update(\SplSubject $subject)
     {
-        if ($subject->getAction() === 'apprun_loadAllAppModules') {
-            $this->obtainCurrentRoute();
+        if ($subject->getAction() === 'bfw_ctrlRouterLink_subject_added') {
+            $app = \BFW\Application::getInstance();
+            $app->getSubjectList()
+                ->getSubjectForName('ctrlRouterLink')
+                ->attach($this)
+            ;
+        } elseif ($subject->getAction() === 'searchRoute') {
+            $this->obtainCtrlRouterInfos($subject);
+            
+            if ($this->ctrlRouterInfos->isFound === false) {
+                $this->searchRoute();
+            }
         }
+    }
+    
+    /**
+     * Set the property ctrlRouterInfos with the context object obtain linked
+     * to the subject.
+     * Allow override to get only some part. And used for unit test.
+     * 
+     * @param \BFW\Subject $subject
+     * 
+     * @return void
+     */
+    protected function obtainCtrlRouterInfos($subject)
+    {
+        $this->ctrlRouterInfos = $subject->getContext();
     }
     
     /**
@@ -143,7 +167,7 @@ class Router implements \SplObserver
      * 
      * @return void
      */
-    public function obtainCurrentRoute()
+    protected function searchRoute()
     {
         //Get current request informations
         $bfwRequest = \BFW\Request::getInstance();
