@@ -27,10 +27,10 @@ class Router implements \SplObserver
     protected $config;
     
     /**
-     * @var \BFW\ControllerRouterLink $routerLinker Linker between
-     *  controller and router instance
+     * @var \stdClass|null $ctrlRouterInfos The context object passed to
+     * subject for the action "searchRoute".
      */
-    protected $routerLinker;
+    protected $ctrlRouterInfos;
     
     /**
      * @var \FastRoute\Dispatcher $dispatcher FastRoute dispatcher
@@ -48,8 +48,6 @@ class Router implements \SplObserver
     {
         $this->module = $module;
         $this->config = $module->getConfig();
-        
-        $this->routerLinker = \BFW\ControllerRouterLink::getInstance();
         
         $this->dispatcher = FastRoute\simpleDispatcher([
             $this,
@@ -125,6 +123,8 @@ class Router implements \SplObserver
         $httpStatus = $this->checkStatus($routeStatus);
         
         http_response_code($httpStatus);
+        $this->addInfosToCtrlRouter();
+        
         if ($httpStatus !== 200) {
             return;
         }
@@ -160,6 +160,20 @@ class Router implements \SplObserver
     }
     
     /**
+     * Update ctrlRouterInfos properties isFound and forWho
+     * 
+     * @return void
+     */
+    protected function addInfosToCtrlRouter()
+    {
+        $app    = \BFW\Application::getInstance();
+        $forWho = $app->getConfig()->getValue('modules')['controller']['name'];
+        
+        $this->ctrlRouterInfos->isFound = true;
+        $this->ctrlRouterInfos->forWho  = $forWho;
+    }
+    
+    /**
      * Obtains route informations from config file and send this informations
      * to the controller/router linker
      * 
@@ -175,7 +189,7 @@ class Router implements \SplObserver
             throw new Exception('Router : target not defined');
         }
         
-        $this->routerLinker->setTarget($routeInfos['target']);
+        $this->ctrlRouterInfos->target = $routeInfos['target'];
     }
     
     /**
