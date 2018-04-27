@@ -210,8 +210,6 @@ class Router implements \SplObserver
         //Add gets datas in route to $_GET var
         $this->addDatasToGetVar($routeInfo[1]);
         $this->addToSuperglobalVar('GET', $routeInfo[2]);
-        
-        $this->sendNotifyRouteFindToOthers();
     }
     
     /**
@@ -297,18 +295,5 @@ class Router implements \SplObserver
         if (isset($routeInfos['get'])) {
             $this->addToSuperglobalVar('GET', $routeInfos['get']);
         }
-    }
-    
-    /**
-     * Send to all observer of Application a notify who contains the message
-     * "request_route_find" to say the route for the current request has been
-     * found by us.
-     * 
-     * @return void
-     */
-    protected function sendNotifyRouteFindToOthers()
-    {
-        $app = \BFW\Application::getInstance();
-        $app->addNotification('request_route_find');
     }
 }
