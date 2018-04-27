@@ -56,6 +56,46 @@ class Router implements \SplObserver
     }
     
     /**
+     * Getter accessor for module property
+     * 
+     * @return \BFW\Module
+     */
+    public function getModule()
+    {
+        return $this->module;
+    }
+
+    /**
+     * Getter accessor for config property
+     * 
+     * @return \BFW\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * Getter accessor for ctrlRouterInfos property
+     * 
+     * @return \stdClass
+     */
+    public function getCtrlRouterInfos()
+    {
+        return $this->ctrlRouterInfos;
+    }
+
+    /**
+     * Getter accessor for dispatcher property
+     * 
+     * @return \FastRoute\Dispatcher
+     */
+    public function getDispatcher()
+    {
+        return $this->dispatcher;
+    }
+    
+    /**
      * Observer update method
      * Call obtainCurrentRoute method on action "apprun_loadAllAppModules".
      * 
