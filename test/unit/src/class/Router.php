@@ -30,8 +30,8 @@ class Router extends Atoum
             [$this->app, 'runCtrlRouterLink']
         ]);
         $this->initApp();
-        $this->createModule();
         $this->app->run();
+        $this->createModule();
         
         if ($testMethod === 'testConstructAndGetters') {
             return;
@@ -52,10 +52,18 @@ class Router extends Atoum
     
     protected function createModule()
     {
-        $this->module = new \BFW\Test\Mock\Module('bfw-fastroute');
-        $config = new \BFW\Config('bfw-fastroute');
-        $this->module->setConfig($config);
-        $this->module->setStatus(true, true);
+        $config     = new \BFW\Config('bfw-fastroute');
+        $moduleList = $this->app->getModuleList();
+        $moduleList->setModuleConfig('bfw-fastroute', $config);
+        $moduleList->addModule('bfw-fastroute');
+        
+        $this->module = $this->app->getModuleForName('bfw-fastroute');
+        
+        $this->module->monolog = new \BFW\Monolog(
+            'bfw-fastroute',
+            \BFW\Application::getInstance()->getConfig()
+        );
+        $this->module->monolog->addAllHandlers();
         
         $config->setConfigForFile(
             'routes.php',
@@ -291,9 +299,9 @@ class Router extends Atoum
         
         $this->assert('test Router::addInfosToCtrlRouter')
             ->given($app = \BFW\Application::getInstance())
-            ->given($modulesInfos = $app->getConfig()->getValue('modules'))
+            ->given($modulesInfos = $app->getConfig()->getValue('modules', 'modules.php'))
             ->if($modulesInfos['controller']['name'] = 'bfw-controller')
-            ->and($app->getConfig()->setConfigKeyForFile('config.php', 'modules', $modulesInfos))
+            ->and($app->getConfig()->setConfigKeyForFile('modules.php', 'modules', $modulesInfos))
             ->then
             ->variable($this->mock->addInfosToCtrlRouter())
                 ->isNull()

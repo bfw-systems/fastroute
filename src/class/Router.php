@@ -112,6 +112,9 @@ class Router implements \SplObserver
     public function update(\SplSubject $subject)
     {
         if ($subject->getAction() === 'bfw_ctrlRouterLink_subject_added') {
+            $this->module->monolog->getLogger()
+                ->debug('Add observer to ctrlRouterLink subject');
+            
             $app = \BFW\Application::getInstance();
             $app->getSubjectList()
                 ->getSubjectForName('ctrlRouterLink')
@@ -149,6 +152,8 @@ class Router implements \SplObserver
      */
     public function addRoutesToCollector(FastRoute\RouteCollector $router)
     {
+        $this->module->monolog->getLogger()->debug('Add all routes.');
+        
         $routes = $this->config->getValue('routes');
         
         foreach ($routes as $slug => $infos) {
@@ -188,6 +193,18 @@ class Router implements \SplObserver
         //Get route information from dispatcher
         $routeInfo   = $this->dispatcher->dispatch($method, $request);
         $routeStatus = $routeInfo[0];
+        
+        $this->module
+            ->monolog
+            ->getLogger()
+            ->debug(
+                'Search the current route into declared routes.',
+                [
+                    'request' => $request,
+                    'method' => $method,
+                    'status' => $routeStatus
+                ]
+            );
         
         //Get and send request http status to the controller/router linker
         $httpStatus = $this->checkStatus($routeStatus);
