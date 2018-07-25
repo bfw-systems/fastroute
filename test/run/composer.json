@@ -2,10 +2,5 @@
     "require": {
         "bulton-fr/bfw": "3.0.0-rc.6",
         "bulton-fr/bfw-fastroute": "2.0.x-dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "Modules\\TestInstall\\": "app/modules/testInstall"
-        }
     }
 }

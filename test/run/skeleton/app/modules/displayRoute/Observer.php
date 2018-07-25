@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\TestInstall;
+namespace Modules\displayRoute;
 
 /**
  * Controller system class
  */
-class TestInstall implements \SplObserver
+class Observer implements \SplObserver
 {
     public function update(\SplSubject $subject)
     {
