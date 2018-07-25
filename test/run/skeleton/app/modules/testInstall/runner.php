@@ -1,4 +1,7 @@
 <?php
 
-$app = \BFW\Application::getInstance();
-$app->attach(new \Modules\TestInstall\TestInstall);
+$observer = new \Modules\TestInstall\TestInstall;
+
+$app        = \BFW\Application::getInstance();
+$appSubject = $app->getSubjectList()->getSubjectForName('ApplicationTasks');
+$appSubject->attach($observer);

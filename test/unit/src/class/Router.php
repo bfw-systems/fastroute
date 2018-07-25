@@ -180,7 +180,7 @@ class Router extends Atoum
         
         $this->assert('test Router::update for searchRoute system')
             ->given($subject = new \BFW\Test\Mock\Subject)
-            ->and($subject->setAction('searchRoute'))
+            ->and($subject->setAction('ctrlRouterLink_exec_searchRoute'))
             ->and($subject->setContext($this->app->getCtrlRouterInfos()))
             ->then
             ->if($this->calling($this->mock)->searchRoute = null)

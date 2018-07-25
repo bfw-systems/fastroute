@@ -117,7 +117,7 @@ class Router implements \SplObserver
                 ->getSubjectForName('ctrlRouterLink')
                 ->attach($this)
             ;
-        } elseif ($subject->getAction() === 'searchRoute') {
+        } elseif ($subject->getAction() === 'ctrlRouterLink_exec_searchRoute') {
             $this->obtainCtrlRouterInfos($subject);
             
             if ($this->ctrlRouterInfos->isFound === false) {
@@ -239,8 +239,11 @@ class Router implements \SplObserver
      */
     protected function addInfosToCtrlRouter()
     {
-        $app    = \BFW\Application::getInstance();
-        $forWho = $app->getConfig()->getValue('modules')['controller']['name'];
+        $modulesConfig = \BFW\Application::getInstance()
+            ->getConfig()
+            ->getValue('modules', 'modules.php')
+        ;
+        $forWho        = $modulesConfig['controller']['name'];
         
         $this->ctrlRouterInfos->isFound = true;
         $this->ctrlRouterInfos->forWho  = $forWho;
