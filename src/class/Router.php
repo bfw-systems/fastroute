@@ -111,16 +111,7 @@ class Router implements \SplObserver
      */
     public function update(\SplSubject $subject)
     {
-        if ($subject->getAction() === 'bfw_ctrlRouterLink_subject_added') {
-            $this->module->monolog->getLogger()
-                ->debug('Add observer to ctrlRouterLink subject');
-            
-            $app = \BFW\Application::getInstance();
-            $app->getSubjectList()
-                ->getSubjectForName('ctrlRouterLink')
-                ->attach($this)
-            ;
-        } elseif ($subject->getAction() === 'ctrlRouterLink_exec_searchRoute') {
+        if ($subject->getAction() === 'ctrlRouterLink_exec_searchRoute') {
             $this->obtainCtrlRouterInfos($subject);
             
             if ($this->ctrlRouterInfos->isFound === false) {

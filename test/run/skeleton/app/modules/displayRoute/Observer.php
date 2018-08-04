@@ -9,13 +9,7 @@ class Observer implements \SplObserver
 {
     public function update(\SplSubject $subject)
     {
-        if ($subject->getAction() === 'bfw_ctrlRouterLink_subject_added') {
-            $app = \BFW\Application::getInstance();
-            $app->getSubjectList()
-                ->getSubjectForName('ctrlRouterLink')
-                ->attach($this)
-            ;
-        } elseif ($subject->getAction() === 'ctrlRouterLink_exec_execRoute') {
+        if ($subject->getAction() === 'ctrlRouterLink_exec_execRoute') {
             $this->run($subject);
         }
     }

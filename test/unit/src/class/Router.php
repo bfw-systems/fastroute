@@ -25,13 +25,11 @@ class Router extends Atoum
         
         $this->setRootDir(__DIR__.'/../../../..');
         $this->createApp();
-        $this->app->setRunSteps([
-            [$this->app, 'initCtrlRouterLink'],
-            [$this->app, 'runCtrlRouterLink']
-        ]);
+        $this->disableSomeCoreSystem();
         $this->initApp();
-        $this->app->run();
+        $this->removeLoadModules();
         $this->createModule();
+        $this->app->run();
         
         if ($testMethod === 'testConstructAndGetters') {
             return;
@@ -50,6 +48,21 @@ class Router extends Atoum
         $this->mock = new \mock\BfwFastRoute\Router($this->module);
     }
     
+    protected function disableSomeCoreSystem()
+    {
+        $coreSystemList = $this->app->getCoreSystemList();
+        unset($coreSystemList['cli']);
+        $this->app->setCoreSystemList($coreSystemList);
+    }
+    
+    protected function removeLoadModules()
+    {
+        $runTasks = $this->app->getRunTasks();
+        $allSteps = $runTasks->getRunSteps();
+        unset($allSteps['moduleList']);
+        $runTasks->setRunSteps($allSteps);
+    }
+    
     protected function createModule()
     {
         $config     = new \BFW\Config('bfw-fastroute');
@@ -57,7 +70,7 @@ class Router extends Atoum
         $moduleList->setModuleConfig('bfw-fastroute', $config);
         $moduleList->addModule('bfw-fastroute');
         
-        $this->module = $this->app->getModuleForName('bfw-fastroute');
+        $this->module = $this->app->getModuleList()->getModuleByName('bfw-fastroute');
         
         $this->module->monolog = new \BFW\Monolog(
             'bfw-fastroute',
@@ -65,7 +78,7 @@ class Router extends Atoum
         );
         $this->module->monolog->addAllHandlers();
         
-        $config->setConfigForFile(
+        $config->setConfigForFilename(
             'routes.php',
             (object) [
                 'routes' =>  [
@@ -175,28 +188,21 @@ class Router extends Atoum
     
     public function testUpdate()
     {
-        $this->assert('test Router::update for adding to linker subject')
+        $this->assert('test Router::update - prepare')
             ->given($subject = new \BFW\Test\Mock\Subject)
-            ->and($subject->setAction('bfw_ctrlRouterLink_subject_added'))
-            ->then
-            ->variable($this->mock->update($subject))
-                ->isNull()
-            ->given($subjectList = \BFW\Application::getInstance()->getSubjectList())
-            ->array($observers = $subjectList->getSubjectForName('ctrlRouterLink')->getObservers())
-                ->contains($this->mock)
         ;
         
         $this->assert('test Router::update for searchRoute system')
             ->given($subject = new \BFW\Test\Mock\Subject)
             ->and($subject->setAction('ctrlRouterLink_exec_searchRoute'))
-            ->and($subject->setContext($this->app->getCtrlRouterInfos()))
+            ->and($subject->setContext($this->app->getCtrlRouterLink()))
             ->then
             ->if($this->calling($this->mock)->searchRoute = null)
             ->then
             ->variable($this->mock->update($subject))
                 ->isNull()
             ->object($this->mock->getCtrlRouterInfos())
-                ->isIdenticalTo($this->app->getCtrlRouterInfos())
+                ->isIdenticalTo($this->app->getCtrlRouterLink())
             ->mock($this->mock)
                 ->call('searchRoute')
                     ->once()
@@ -211,7 +217,7 @@ class Router extends Atoum
             ->and($_SERVER['REQUEST_METHOD'] = 'GET')
             ->and(\BFW\Request::getInstance()->runDetect())
             ->then
-            ->given($ctrlRouterInfos = $this->app->getCtrlRouterInfos())
+            ->given($ctrlRouterInfos = $this->app->getCtrlRouterLink())
             ->given($subject = new \BFW\Test\Mock\Subject)
             ->if($subject->setContext($ctrlRouterInfos))
             ->and($this->mock->obtainCtrlRouterInfos($subject))
@@ -291,7 +297,7 @@ class Router extends Atoum
     public function testAddInfosToCtrlRouter()
     {
         $this->assert('test Router::addInfosToCtrlRouter - prepare')
-            ->given($ctrlRouterInfos = $this->app->getCtrlRouterInfos())
+            ->given($ctrlRouterInfos = $this->app->getCtrlRouterLink())
             ->given($subject = new \BFW\Test\Mock\Subject)
             ->if($subject->setContext($ctrlRouterInfos))
             ->and($this->mock->obtainCtrlRouterInfos($subject))
@@ -301,7 +307,7 @@ class Router extends Atoum
             ->given($app = \BFW\Application::getInstance())
             ->given($modulesInfos = $app->getConfig()->getValue('modules', 'modules.php'))
             ->if($modulesInfos['controller']['name'] = 'bfw-controller')
-            ->and($app->getConfig()->setConfigKeyForFile('modules.php', 'modules', $modulesInfos))
+            ->and($app->getConfig()->setConfigKeyForFilename('modules.php', 'modules', $modulesInfos))
             ->then
             ->variable($this->mock->addInfosToCtrlRouter())
                 ->isNull()
@@ -315,7 +321,7 @@ class Router extends Atoum
     public function testAddTargetToCtrlRouter()
     {
         $this->assert('test Router::addTargetToCtrlRouter - prepare')
-            ->given($ctrlRouterInfos = $this->app->getCtrlRouterInfos())
+            ->given($ctrlRouterInfos = $this->app->getCtrlRouterLink())
             ->given($subject = new \BFW\Test\Mock\Subject)
             ->if($subject->setContext($ctrlRouterInfos))
             ->and($this->mock->obtainCtrlRouterInfos($subject))

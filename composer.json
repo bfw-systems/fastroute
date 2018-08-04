@@ -20,7 +20,7 @@
 	},
 	"require": {
         "php": ">=5.6.0",
-        "bulton-fr/bfw": "3.0.0-rc.6",
+        "bulton-fr/bfw": "3.0.0-rc.7",
         "nikic/fast-route": "~v1.3"
 	},
     "require-dev": {
