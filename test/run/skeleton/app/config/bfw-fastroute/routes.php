@@ -1,6 +1,6 @@
 <?php
 
-return (object) [
+return [
     'routes' => [
         '/' => [
             'target' => 'index.php'
