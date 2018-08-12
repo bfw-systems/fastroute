@@ -279,7 +279,7 @@ class Router extends atoum
     public function testCheckStatus()
     {
         $this->assert('test Router::checkStatus with default value')
-            ->integer($this->mock->checkStatus('atoum'))
+            ->integer($this->mock->checkStatus(42))
                 ->isEqualTo(200)
         ;
         

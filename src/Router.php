@@ -33,7 +33,7 @@ class Router implements \SplObserver
     protected $config;
     
     /**
-     * @var \stdClass|null $ctrlRouterInfos The context object passed to
+     * @var object|null $ctrlRouterInfos The context object passed to
      * subject for the action "searchRoute".
      */
     protected $ctrlRouterInfos;
@@ -66,7 +66,7 @@ class Router implements \SplObserver
      * 
      * @return \BFW\Module
      */
-    public function getModule()
+    public function getModule(): \BFW\Module
     {
         return $this->module;
     }
@@ -76,7 +76,7 @@ class Router implements \SplObserver
      * 
      * @return \BFW\Config
      */
-    public function getConfig()
+    public function getConfig(): \BFW\Config
     {
         return $this->config;
     }
@@ -84,7 +84,7 @@ class Router implements \SplObserver
     /**
      * Getter accessor for ctrlRouterInfos property
      * 
-     * @return \stdClass
+     * @return object
      */
     public function getCtrlRouterInfos()
     {
@@ -96,7 +96,7 @@ class Router implements \SplObserver
      * 
      * @return \FastRoute\Dispatcher
      */
-    public function getDispatcher()
+    public function getDispatcher(): \FastRoute\Dispatcher
     {
         return $this->dispatcher;
     }
@@ -129,7 +129,7 @@ class Router implements \SplObserver
      * 
      * @return void
      */
-    protected function obtainCtrlRouterInfos($subject)
+    protected function obtainCtrlRouterInfos(\BFW\Subject $subject)
     {
         $this->ctrlRouterInfos = $subject->getContext();
     }
@@ -227,7 +227,7 @@ class Router implements \SplObserver
      * 
      * @return int
      */
-    protected function checkStatus($routeStatus)
+    protected function checkStatus(int $routeStatus): int
     {
         $httpStatus = 200;
         
@@ -287,8 +287,10 @@ class Router implements \SplObserver
      * 
      * @return void
      */
-    protected function addToSuperglobalVar($globalVarName, array $datasToAdd)
-    {
+    protected function addToSuperglobalVar(
+        string $globalVarName,
+        array $datasToAdd
+    ) {
         global ${'_'.$globalVarName};
         ${'_'.$globalVarName} = array_merge(${'_'.$globalVarName}, $datasToAdd);
     }
