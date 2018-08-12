@@ -30,7 +30,7 @@
 	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
-			"BfwFastRoute\\": "src/class/"
+			"BfwFastRoute\\": "src/"
 		}
 	}
 }
