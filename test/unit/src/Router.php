@@ -25,7 +25,7 @@ class Router extends atoum
         
         $this->setRootDir(__DIR__.'/../../..');
         $this->createApp();
-        $this->disableSomeCoreSystem();
+        $this->disableSomeAppSystem();
         $this->initApp();
         $this->removeLoadModules();
         $this->createModule();
@@ -48,11 +48,11 @@ class Router extends atoum
         $this->mock = new \mock\BfwFastRoute\Router($this->module);
     }
     
-    protected function disableSomeCoreSystem()
+    protected function disableSomeAppSystem()
     {
-        $coreSystemList = $this->app->getCoreSystemList();
-        unset($coreSystemList['cli']);
-        $this->app->setCoreSystemList($coreSystemList);
+        $appSystemList = $this->app->obtainAppSystemDefaultList();
+        unset($appSystemList['cli']);
+        $this->app->setAppSystemToInstantiate($appSystemList);
     }
     
     protected function removeLoadModules()
